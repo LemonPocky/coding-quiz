@@ -1,15 +1,42 @@
+const timer = {
+    time: 99,
+    showTimer: function() {
+        let timerElement = document.querySelector('.timer');
+        timerElement.textContent = 'Time: ' + this.time;
+    },
+    hideTimer: function() {
+        let timerElement = document.querySelector('.timer');
+        timerElement.textContent = '';
+    }
+}
+
 function init() {
     showStart();
 }
 
 function showStart() {
-    const questionElement = document.querySelector('.question');
-    questionElement.textContent = 'Welcome to the JavaScript Code Quiz!\n\n'
+    const welcomeText = document.querySelector('.question');
+    welcomeText.textContent = 'Welcome to the JavaScript Code Quiz!\n\n'
         + 'Answer questions until time runs out! Incorrect answers will subtract time.\n'
         + 'Good luck!';
 
     clearAnswers();
-    addAnswer('Start!');
+    const startButton = addAnswer('Start!');
+    startButton.addEventListener('click', initGame);
+}
+
+function initGame() {
+    // Display the timer in the upper right
+    timer.time = 99;
+    timer.showTimer();
+
+    const questionElement = document.querySelector('.question');
+    questionElement.textContent = 'What is 2 + 3?'
+    clearAnswers();
+    addAnswer('2');
+    addAnswer('5');
+    addAnswer('40');
+    addAnswer('9999');
 }
 
 // Helper function that creates answer buttons
