@@ -37,7 +37,7 @@ body {
 
     background-color:rgb(101, 6, 156);
     /* Needed for line breaks */
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 .option {
@@ -51,7 +51,7 @@ body {
     background-color:rgb(52, 2, 82);
     color: white;    
     /* Needed for line breaks */
-    white-space: pre;
+    white-space: pre-wrap;
 
     transition: all 0.4s;
 }

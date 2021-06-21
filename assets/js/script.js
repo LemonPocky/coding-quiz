@@ -1,12 +1,25 @@
+// Object that is responsible for managing the timer of the game
 const timer = {
-    time: 99,
-    showTimer: function() {
+    time: 0,
+    timerInterval: 0,
+    render: function() {
         let timerElement = document.querySelector('.timer');
         timerElement.textContent = 'Time: ' + this.time;
     },
-    hideTimer: function() {
+    hide: function() {
         let timerElement = document.querySelector('.timer');
         timerElement.textContent = '';
+    },
+    start: function() {
+        timerInterval = setInterval(function() {
+            if (this.time <= 0) {
+                clearInterval(this.timerInterval);
+                // TODO: End the game somehow?
+            } else {
+                this.time--;
+                this.render();
+            }
+        }.bind(this), 1000);
     }
 }
 
@@ -28,7 +41,8 @@ function showStart() {
 function initGame() {
     // Display the timer in the upper right
     timer.time = 99;
-    timer.showTimer();
+    timer.render();
+    timer.start();
 
     const questionElement = document.querySelector('.question');
     questionElement.textContent = 'What is 2 + 3?'
