@@ -1,34 +1,20 @@
-// Temp? Array of question objects
-// Question object template:
-// (This looks a lot like JSON -hinthint-)
-//  {
-    //  text: '',
-    //  answers: [
-    //      {
-    //          text: '',
-    //          isCorrect: true,
-    //      },
-    //      {
-    //          text: '',
-    //          isCorrect: false,
-    //      },
-    //      ...
-    //  ]
-//  }
-
 
 // Object that is responsible for managing the timer of the game
 const timer = {
     time: 0,
     timerInterval: 0,
+    wrongPenalty: 10,
+    
     render: function() {
         let timerElement = document.querySelector('.timer');
         timerElement.textContent = 'Time: ' + this.time;
     },
+
     hide: function() {
         let timerElement = document.querySelector('.timer');
         timerElement.textContent = '';
     },
+
     start: function() {
         timerInterval = setInterval(function() {
             if (this.time <= 0) {
@@ -39,6 +25,16 @@ const timer = {
                 this.render();
             }
         }.bind(this), 1000); //.bind is necessary with setInterval
+    },
+
+    // Subtract from time for an incorrect answer
+    penalty: function() {
+        if (this.time <= this.wrongPenalty) {
+            this.time = 0;
+        } else {
+            this.time -= this.wrongPenalty;
+        }
+        this.render();
     }
 }
 
@@ -72,6 +68,10 @@ function runGame() {
     const answersContainerElement = document.querySelector('answers-container');
     // TODO: Randomly order questions, but in order is ok for now
 
+    // Controls whether or not answers can be clicked on
+    // Becomes false when an answer is clicked to prevent selecting multiple answers
+    let questionIsLive = true;
+
     // Loop through the questions
     for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
         let question = questions[questionIndex];
@@ -79,7 +79,7 @@ function runGame() {
         // TODO: Shuffle answers, while keeping track of the correct one
         // For now, the answers are always in the same order
         clearAnswers();
-        
+
         // Display answers
         for (let i = 0; i < question.answers.length; i++) {
             let currentAnswer = question.answers[i];
@@ -88,13 +88,17 @@ function runGame() {
             // Aside: event delegation may not be possible here? Since we want the correct answer
             // to have different behavior than the incorrect answer.
             button.addEventListener('click', function() {
-                if (currentAnswer.isCorrect){
-                    console.log('Correct');
-                } else {
-                    console.log('Wrong');
+                if (questionIsLive){
+                    if (currentAnswer.isCorrect){
+                        handleCorrectAnswer(button);
+                    } else {
+                        handleWrongAnswer(button);
+                    }
+                    questionIsLive = false;
                 }
             });
         }
+        questionIsLive = true;
     }
 }
 
@@ -117,6 +121,17 @@ function addAnswer(answerText) {
 // Removes answer choices from the screen
 function clearAnswers() {
     document.querySelector('.answers-container').innerHTML = '';
+}
+
+function handleCorrectAnswer(button) {
+    button.style.backgroundColor = 'green';
+}
+
+function handleWrongAnswer(button) {
+    button.style.backgroundColor = 'red';
+
+    // Subtract time penalty
+    timer.penalty();
 }
 
 // Helper function that randomly shuffles an array's order
