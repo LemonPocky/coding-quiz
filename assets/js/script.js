@@ -133,13 +133,31 @@ function endGame() {
     timer.stop();
 
     let score = timer.time;
+    // If score is greater than 0, add score to high scores
     if (score > 0) {
         questionElement.textContent = 'Game over!\n\n'
             + 'Final score: ' + score;
+        // Build form to enter initials
+        buildNameForm();
+        document.querySelector('.submit-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            let name = document.querySelector('.name-input').value;
+            if (!name) {
+                return;
+            }
+            addHighScore(name, score);
+        });
     } else {
+        // If score is 0, the game is over
         questionElement.textContent = "Time's up!\n\n"
             + 'Better luck next time...';
+        let retryButton = addAnswer('Retry');
+        retryButton.addEventListener('click', function() {
+            showStart();
+        })
     }
+
+
 }
 
 // Helper function that creates answer buttons
@@ -172,6 +190,32 @@ function handleWrongAnswer(button) {
 
     // Subtract time penalty
     timer.penalty();
+}
+
+function buildNameForm() {
+    let form = document.createElement('form');
+    form.classList.add('highscore-form');
+
+    let nameInput = document.createElement('input');
+    nameInput.setAttribute('type', 'text');
+    nameInput.setAttribute('name', 'Name');
+    nameInput.classList.add('name-input');
+    nameInput.setAttribute('placeholder', 'Name');
+    
+    let submitButton = document.createElement('button');
+    submitButton.classList.add('submit-button');
+    submitButton.textContent = 'Submit';
+    submitButton.setAttribute('type', 'submit');
+
+    const answersContainerElement = document.querySelector('.answers-container');
+    form.appendChild(nameInput);
+    form.appendChild(submitButton);
+    answersContainerElement.appendChild(form);
+}
+
+function addHighScore(name, score) {
+    // TODO: Add high score to local storage
+    console.log(name + score);
 }
 
 // Helper function that randomly shuffles an array's order
