@@ -4,7 +4,7 @@ const timer = {
     time: 0,
     timerInterval: 0,
     wrongPenalty: 10,
-    
+
     render: function() {
         let timerElement = document.querySelector('.timer');
         timerElement.textContent = 'Time: ' + this.time;
@@ -50,56 +50,63 @@ function showStart() {
 
     clearAnswers();
     const startButton = addAnswer('Start!');
-    startButton.addEventListener('click', initGame);
+    startButton.addEventListener('click', runGame);
 }
 
-function initGame() {
+function runGame() {
     // Display the timer in the upper right
     timer.time = 99;
     timer.render();
     timer.start();
 
-    // TODO: Change High Scores into Back To Start
-    runGame();
+    // TODO: Change High Scores link into Back To Start
+
+    // TODO: Randomly order questions
+    // In order is okay for now
+
+    // Display questions starting from 0
+    displayQuestion(0);
 }
 
-function runGame() {
-    const questionElement = document.querySelector('.question');
-    const answersContainerElement = document.querySelector('answers-container');
-    // TODO: Randomly order questions, but in order is ok for now
-
+function displayQuestion(index) {
     // Controls whether or not answers can be clicked on
     // Becomes false when an answer is clicked to prevent selecting multiple answers
-    let questionIsLive = true;
+    let questionIsLive = false;
+    const questionElement = document.querySelector('.question');
+    const answersContainerElement = document.querySelector('answers-container');
 
-    // Loop through the questions
-    for (let questionIndex = 0; questionIndex < questions.length; questionIndex++) {
-        let question = questions[questionIndex];
-        questionElement.textContent = question.text;
-        // TODO: Shuffle answers, while keeping track of the correct one
-        // For now, the answers are always in the same order
-        clearAnswers();
+    const question = questions[index];
+    questionElement.textContent = question.text;
+    clearAnswers();
 
-        // Display answers
-        for (let i = 0; i < question.answers.length; i++) {
-            let currentAnswer = question.answers[i];
-            let button = addAnswer(currentAnswer.text);
-            // Add click event listeners to buttons
-            // Aside: event delegation may not be possible here? Since we want the correct answer
-            // to have different behavior than the incorrect answer.
-            button.addEventListener('click', function() {
-                if (questionIsLive){
-                    if (currentAnswer.isCorrect){
-                        handleCorrectAnswer(button);
-                    } else {
-                        handleWrongAnswer(button);
-                    }
-                    questionIsLive = false;
-                }
-            });
-        }
-        questionIsLive = true;
+    // Display answers
+    for (let i = 0; i < question.answers.length; i++) {
+        const currentAnswer = question.answers[i];
+        const button = addAnswer(currentAnswer.text);
+        // Add click event listeners to buttons
+        // Aside: event delegation may not be possible here? Since we want the correct answer
+        // to have different behavior than the incorrect answer.
+        button.addEventListener('click', function () {
+            if (!questionIsLive) {
+                return;
+            }
+
+            if (currentAnswer.isCorrect) {
+                handleCorrectAnswer(button);
+            } else {
+                handleWrongAnswer(button);
+            }
+            questionIsLive = false;
+            
+            // Call for the next question
+            setTimeout(() => {
+                displayQuestion(index+1);
+            }, 1000);
+        });
     }
+
+    // Let answers be clickable
+    questionIsLive = true;
 }
 
 // Helper function that creates answer buttons
