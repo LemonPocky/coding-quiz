@@ -38,4 +38,29 @@ questions = [
             },
         ]
     },
+    {
+        text: 'Which of the following are hoisted in JavaScript?',
+        answers: [
+            {
+                text: 'Variable declarations',
+                isCorrect: true,
+            },
+            {
+                text: 'Variable initializations',
+                isCorrect: false,
+            },
+            {
+                text: 'Function declarations',
+                isCorrect: true,
+            },
+            {
+                text: 'Function expressions',
+                isCorrect: false,
+            },
+            {
+                text: 'None of the above',
+                isCorrect: false,
+            }
+        ]
+    },
 ]

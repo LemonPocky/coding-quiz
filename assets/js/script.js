@@ -69,6 +69,11 @@ function runGame() {
 }
 
 function displayQuestion(index) {
+    if (index >= questions.length) {
+        // TODO: End game somehow?
+        return;
+    }
+
     // Controls whether or not answers can be clicked on
     // Becomes false when an answer is clicked to prevent selecting multiple answers
     let questionIsLive = false;
