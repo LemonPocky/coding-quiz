@@ -2,6 +2,7 @@ function renderPage() {
     clearScores();
     let scores = loadScores();
     showScores(scores);
+    addResetButton();
 } 
 
 function clearScores() {
@@ -31,6 +32,23 @@ function showScores(scores) {
         scoresContainer.appendChild(scoreElement);
     }
 
+}
+
+// Adds a reset button that will delete all high scores
+function addResetButton() {
+    const scoresContainer = document.querySelector('.highscores-container');
+    const resetButton = document.createElement('button');
+    resetButton.classList.add('submit-button');
+    resetButton.textContent = 'Reset High Scores';
+    resetButton.addEventListener('click', function() {
+        // Confirm if high scores should be deleted first
+        if ( confirm('Are you sure you want to reset all high scores?') ) {
+            localStorage.clear();
+            // Refresh the page after scores are cleared
+            renderPage();
+        }
+    });
+    scoresContainer.appendChild(resetButton);
 }
 
 renderPage();
