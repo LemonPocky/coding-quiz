@@ -1,4 +1,3 @@
-
 // Object that is responsible for managing the timer of the game
 const timer = {
     time: 0,
@@ -145,7 +144,7 @@ function endGame() {
             if (!name) {
                 return;
             }
-            addHighScore(name, score);
+            saveHighScore(name, score);
         });
     } else {
         // If score is 0, the game is over
@@ -164,11 +163,8 @@ function endGame() {
 // Returns the newly created button element
 function addAnswer(answerText) {
     const answers = document.querySelector('.answers-container');
-    // Index represents which number (1st, 2nd, etc) this answer is
-    const index = answers.childElementCount + 1;
     const answer = document.createElement('button');
     answer.classList.add('option', 'answer');
-    answer.dataset.index = index;
     answer.textContent = answerText;
     
     // Add the newly created answer to the list of answers
@@ -213,9 +209,39 @@ function buildNameForm() {
     answersContainerElement.appendChild(form);
 }
 
-function addHighScore(name, score) {
-    // TODO: Add high score to local storage
-    console.log(name + score);
+// Add high score to local storage
+function saveHighScore(name, score) {    
+    let newHighScore = {
+        name: name,
+        score: score,
+    }
+    // Get the array of high scores from local storage
+    // Return empty array if getItem returns null
+    let highscores = JSON.parse(localStorage.getItem('highscores') || '[]');
+    // Insert new high score in the correct order in the highscores
+    insertHighScore(newHighScore, highscores);
+    // Put the array back into local storage
+    localStorage.setItem('highscores', JSON.stringify(highscores));
+    // Redirect to highscores page
+    location.href = 'highscores.html';
+}
+
+// Push highscore into the list of highscores, then sort the list again
+// There's probably a faster implementation of this, but highscoreArray should be a short list anyways -shoots foot-
+function insertHighScore(newHighScore, highscoreArray) {
+    highscoreArray.push(newHighScore);
+
+    // Because we have to sort objects, we need to define a custom compare function
+    highscoreArray.sort((a, b) => {
+        // highest score should be FIRST in the array
+        if (a.score > b.score) {
+            return -1;
+        }
+        if (a.score < b.score) {
+            return 1;
+        }
+        return 0;
+    });
 }
 
 // Helper function that randomly shuffles an array's order
