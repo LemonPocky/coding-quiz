@@ -16,15 +16,22 @@ const timer = {
     },
 
     start: function() {
-        timerInterval = setInterval(function() {
-            if (this.time <= 0) {
+        this.timerInterval = setInterval(function() {
+            if (this.time <= 1) {
                 clearInterval(this.timerInterval);
-                // TODO: End the game somehow?
+                this.time = 0;
+                this.render();
+                // Ends the game when time is 0
+                endGame();
             } else {
                 this.time--;
                 this.render();
             }
         }.bind(this), 1000); //.bind is necessary with setInterval
+    },
+
+    stop: function() {
+        clearInterval(this.timerInterval);
     },
 
     // Subtract from time for an incorrect answer
@@ -48,6 +55,8 @@ function showStart() {
         + 'Answer questions until time runs out! Incorrect answers will subtract time.\n'
         + 'Good luck!';
 
+    // Change upper left link into High Scores
+
     clearAnswers();
     const startButton = addAnswer('Start!');
     startButton.addEventListener('click', runGame);
@@ -55,7 +64,7 @@ function showStart() {
 
 function runGame() {
     // Display the timer in the upper right
-    timer.time = 99;
+    timer.time = 22;
     timer.render();
     timer.start();
 
@@ -70,7 +79,7 @@ function runGame() {
 
 function displayQuestion(index) {
     if (index >= questions.length) {
-        // TODO: End game somehow?
+        endGame();
         return;
     }
 
@@ -105,13 +114,32 @@ function displayQuestion(index) {
             
             // Call for the next question
             setTimeout(() => {
-                displayQuestion(index+1);
+                // But only if there's still time left
+                if (timer.time > 0) {
+                    displayQuestion(index + 1);
+                }
             }, 1000);
         });
     }
 
     // Let answers be clickable
     questionIsLive = true;
+}
+
+function endGame() {
+    const questionElement = document.querySelector('.question');
+
+    clearAnswers();
+    timer.stop();
+
+    let score = timer.time;
+    if (score > 0) {
+        questionElement.textContent = 'Game over!\n\n'
+            + 'Final score: ' + score;
+    } else {
+        questionElement.textContent = "Time's up!\n\n"
+            + 'Better luck next time...';
+    }
 }
 
 // Helper function that creates answer buttons
