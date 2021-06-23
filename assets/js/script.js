@@ -51,7 +51,7 @@ function init() {
 function showStart() {
     const welcomeText = document.querySelector('.question');
     welcomeText.textContent = 'Welcome to the JavaScript Code Quiz!\n\n'
-        + 'Answer questions until time runs out! Incorrect answers will subtract time.\n'
+        + 'Answer the questions before time runs out! Incorrect answers will subtract time.\n'
         + 'Good luck!';
 
     // Change upper left link into High Scores
