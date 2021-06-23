@@ -1,8 +1,8 @@
 // Object that is responsible for managing the timer of the game
 const timer = {
-    time: 0,
+    time: 200,
     timerInterval: 0,
-    wrongPenalty: 10,
+    wrongPenalty: 30,
 
     render: function() {
         let timerElement = document.querySelector('.timer');
@@ -63,14 +63,13 @@ function showStart() {
 
 function runGame() {
     // Display the timer in the upper right
-    timer.time = 22;
     timer.render();
     timer.start();
 
     // TODO: Change High Scores link into Back To Start
 
-    // TODO: Randomly order questions
-    // In order is okay for now
+    // Randomly order questions
+    questions = shuffle(questions);
 
     // Display questions starting from 0
     displayQuestion(0);
@@ -91,6 +90,7 @@ function displayQuestion(index) {
     const question = questions[index];
     questionElement.textContent = question.text;
     clearAnswers();
+    updateQuestionNumber(index, questions.length);
 
     // Display answers
     for (let i = 0; i < question.answers.length; i++) {
@@ -129,13 +129,15 @@ function endGame() {
     const questionElement = document.querySelector('.question');
 
     clearAnswers();
+    clearQuestionNumber();
     timer.stop();
 
     let score = timer.time;
     // If score is greater than 0, add score to high scores
     if (score > 0) {
         questionElement.textContent = 'Game over!\n\n'
-            + 'Final score: ' + score;
+            + 'Final score: ' + score + '\n\n'
+            + 'High score! Please enter your name below.';
         // Build form to enter initials
         buildNameForm();
         document.querySelector('.submit-button').addEventListener('click', function(event) {
@@ -186,6 +188,18 @@ function handleWrongAnswer(button) {
 
     // Subtract time penalty
     timer.penalty();
+}
+
+// Changes on-screen question number
+function updateQuestionNumber(index, total) {
+    const topic = document.querySelector('.topic');
+    topic.textContent = 'Question ' + (index+1) + ' of ' + total;
+}
+
+// Removes on-screen question number
+function clearQuestionNumber() {
+    const topic = document.querySelector('.topic');
+    topic.textContent = '';
 }
 
 function buildNameForm() {

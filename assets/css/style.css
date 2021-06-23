@@ -50,6 +50,7 @@ body {
 
     background-color:rgb(52, 2, 82);
     color: white;    
+    text-align: center;
     /* Needed for line breaks */
     white-space: pre-wrap;
 
