@@ -143,4 +143,55 @@ questions = [
             },
         ]
     },
+    {
+        text: 'What is the purpose of window.localStorage?',
+        answers: [
+            {
+                text: 'It allows the window to store local variables for use in another webpage.',
+                isCorrect: false,
+            },
+            {
+                text: 'It stores data in the browser to be saved between sessions.',
+                isCorrect: true,
+            },
+            {
+                text: 'It allows for the caching of webpages to quicken load times.',
+                isCorrect: false,
+            },
+            {
+                text: 'It\'s used when the window.globalStorage is full and the browser requires more memory to run.',
+                isCorrect: false,
+            },
+        ]
+    },
+    {
+        text: 'What is the best way to do strict comparison in JavaScript?',
+        answers: [
+            {
+                text: 'a === b',
+                isCorrect: true,
+            },
+            {
+                text: 'a == b',
+                isCorrect: false,
+            },
+            {
+                text: 'a = b',
+                isCorrect: false,
+            },
+        ]
+    },
+    {
+        text: 'True or false: JavaScript requires an internet connection to run.',
+        answers: [
+            {
+                text: 'True',
+                isCorrect: false,
+            },
+            {
+                text: 'False',
+                isCorrect: true,
+            },
+        ]
+    },
 ]
